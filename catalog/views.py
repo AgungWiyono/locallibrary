@@ -20,11 +20,16 @@ def index(request):
     # The 'all()' is implied by default
     num_authors = Author.objects.count()
 
+    # Number of visit to this page, as counted in session variable
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
     context = {
         'num_books': num_books,
         'num_instances': num_instance,
         'num_instances_available': num_instance_available,
         'num_authors': num_authors,
+        'num_visits': num_visits,
     }
 
     return render(request, 'index.html', context=context)
