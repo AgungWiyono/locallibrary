@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 ]
 
-CRISPY_FORM_TEMPLATE= 'bootstrap4'
+CRISPY_FORM_TEMPLATE = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_catalog.urls'
+ROOT_URLCONF = 'locallibrary.urls'
 
 TEMPLATES = [
     {
@@ -74,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_catalog.wsgi.application'
+WSGI_APPLICATION = 'locallibrary.wsgi.application'
 
 
 # Database
