@@ -169,4 +169,55 @@ class LoanedBookByUserListViewTest(TestCase):
         self.assertEqual(str(response.context['user']), 'testuser1')
 
         # Check that we got a response "success"
-        self.assertEqual()
+        self.assertEqual(response.status_code, 200)
+
+        # Check that we don't have any book loaned
+        self.assertTrue('bookinstancelist' in response.context)
+        self.assertEqual(len(response.context['bookinstancelist']), 0)
+
+        # Change some books's status to loan('o')
+        books = BookInstance.objects.all()[:10]
+        for book in books:
+            book.status = 'o'
+            book.save()
+
+        # Repeat the login proccess
+        response = self.client.get(reverse('my-borrowed'))
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        self.assertEqual(response.status_code, 200)
+
+        # Check borrowed book list in page
+        self.assertTrue('bookinstancelist' in response.context)
+
+        # Confirm all book belong to testuser1
+        for book in response.context['bookinstancelist']:
+            self.assertEqual(response.context['user'], book.borrower)
+            self.assertEqual('o', book.status)
+
+    def test_booklist_ordered_by_due_date(self):
+        """Test that booklist should be ordered by due date."""
+        # Change all book's status to loan('o')
+        for book in BookInstance.objects.all():
+            book.status = 'o'
+            book.save()
+
+        # Login into page
+        login = self.client.login(
+                                username='testuser1',
+                                password='1X<ISRUkw+tuK')
+        response = self.client.get(reverse('my-borrowed'))
+
+        # Check that user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        self.assertEqual(response.status_code, 200)
+
+        # Confirm that only 10 items are displayed per page
+        self.assertEqual(len(response.context['bookinstancelist']), 10)
+
+        last_date = 0
+        for book in response.context['bookinstancelist']:
+            if last_date == 0:
+                last_date = book.due_back
+            else:
+                self.assertTrue(last_date <= book.due_back)
+                last_date = book.due_back
