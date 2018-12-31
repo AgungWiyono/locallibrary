@@ -134,7 +134,9 @@ def librarian_renew_book(request, pk):
         'book_instance': book_instance,
     }
 
-    return render(request, 'librarian_renew_book.html', context=context)
+    return render(request,
+                  'catalog/librarian_renew_book.html',
+                  context=context)
 
 
 class AuthorCreate(CreateView):

@@ -12,7 +12,7 @@ from catalog.models import BookInstance
 class RenewBookForm(forms.ModelForm):
     """Form for updating due back date of borrowed book."""
 
-    def clean_renewal_date(self):
+    def clean_due_back(self):
         """Validate form data."""
         data = self.cleaned_data['due_back']
 
@@ -20,7 +20,7 @@ class RenewBookForm(forms.ModelForm):
         if data < datetime.date.today():
             raise ValidationError(_('Invalid date - renewal in the pas'))
 
-        if data > datetime.date.today() + datetime.timedelta(weeks=4):
+        if data > (datetime.date.today() + datetime.timedelta(weeks=4)):
             raise ValidationError(_('Invalid date -\
                                     renewal more than 4 weeks a ahead'))
         return data
@@ -30,7 +30,6 @@ class RenewBookForm(forms.ModelForm):
 
         model = BookInstance
         fields = ['due_back']
-        labels = {'due_back': _('New Renewal Date'), }
+        labels = {'due_back': _('New Renewal Date')}
         help_texts = {
-            'due_back': _('Enter a date between now and 4 weeks (default 3'),
-        }
+            'due_back': _('Enter a date between now and 4 weeks (default 3)')}
