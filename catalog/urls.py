@@ -4,14 +4,14 @@ from django.urls import path, include
 from catalog import views
 
 author_url = [
-    path('authors', views.AuthorListView.as_view(), name='authors'),
+    path('authors/', views.AuthorListView.as_view(), name='authors'),
     path('author/<int:pk>', views.AuthorDetailView.as_view(),
          name='author-detail'),
     path('author/create/', views.AuthorCreate.as_view(),
          name='author_create'),
-    path('author/<int:pk>/update', views.AuthorUpdate.as_view(),
+    path('author/<int:pk>/update/', views.AuthorUpdate.as_view(),
          name='author_update'),
-    path('author/<int:pk>/delete', views.AuthorDelete.as_view(),
+    path('author/<int:pk>/delete/', views.AuthorDelete.as_view(),
          name='author_delete'),
 ]
 
